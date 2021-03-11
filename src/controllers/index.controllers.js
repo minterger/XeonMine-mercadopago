@@ -60,11 +60,18 @@ indexCtrl.feedback = (req, res) => {
 }
 
 indexCtrl.feedbackPost = async (req, res) => {
-    console.log(req.body)
-    const response = await fetch(`https://api.mercadopago.com/v1/payments/${req.body.data.id}?access_token=APP_USR-1014301261836371-031015-daaa0cccbdf61be55b9b5e8b72d4e957-726590435`)
-    const json = await response.json()
-    console.log(json)
-    return res.status(200); 
+    if (req.method === "POST") {
+        let body = "";
+        req.on("data", chunk => {
+          body += chunk.toString();
+        });
+        req.on("end", () => {
+          console.log(body, "webhook response");
+          res.end("ok");
+        });
+      }
+      return res.status(201);
+    }
 }
 
 module.exports = indexCtrl;
