@@ -13,6 +13,6 @@ router.post('/donar', datosDonar);
 
 router.get('/feedback', feedback);
 
-router.post('/postfeedback', (req, res) => feedbackPost);
+router.post('/postfeedback', feedbackPost);
 
 module.exports = router;
