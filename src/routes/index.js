@@ -12,6 +12,7 @@ router.get('/', renderIndex);
 router.post('/donar', datosDonar);
 
 router.get('/feedback', feedback);
-router.post('/postfeedback', feedbackPost);
+
+router.post('/postfeedback', (req, res) => feedbackPost);
 
 module.exports = router;
