@@ -59,10 +59,10 @@ indexCtrl.feedback = (req, res) => {
     });
 }
 
-indexCtrl.feedbackPost = async (req, res) => {
-
+indexCtrl.feedbackPost = async (req, res, next) => {
     mp.payment.get({id: req.body.data.id});
-    res.status(201);
+    res.status(200);
+    next();
 }
 
 module.exports = indexCtrl;
