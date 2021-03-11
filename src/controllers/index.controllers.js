@@ -69,9 +69,8 @@ indexCtrl.feedbackPost = async (req, res) => {
           console.log(body, "webhook response");
           res.end("ok");
         });
-      }
-      return res.status(201);
     }
+    return res.status(201);
 }
 
 module.exports = indexCtrl;
