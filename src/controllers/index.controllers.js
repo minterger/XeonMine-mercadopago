@@ -60,11 +60,18 @@ indexCtrl.feedback = (req, res) => {
 }
 
 indexCtrl.feedbackPost = async (req, res, next) => {
-    console.log(req.body)
-    const data = await mp.payment.get({id: req.body.data});
-    console.log(data)
-    res.status(200);
-    next();
+    if (req.body.data) {
+        console.log(req.body.data.id);
+        let id = req.body.data.id;
+        mp.payment.get(id)
+        .then((data) => {
+            console.log(data)
+            res.status(200);
+        })
+        .catch((err) => {
+            console.error(err);
+        })
+    }
 }
 
 module.exports = indexCtrl;
