@@ -60,15 +60,8 @@ indexCtrl.feedback = (req, res) => {
 }
 
 indexCtrl.feedbackPost = async (req, res) => {
-    // console.log(req.body)
-    // let body = "";
-    // req.on("data", chunk => {
-    //     body += chunk.toString();
-    //     console.log(chunk)
-    // });
-    // req.on("end", () => {
-    //     console.log(body, "webhook response");
-    // });
+
+    mp.payment.get({id: req.body.data.id})
     res.end("ok");
     return res.status(201);
 }
