@@ -61,9 +61,8 @@ indexCtrl.feedback = (req, res) => {
 
 indexCtrl.feedbackPost = async (req, res) => {
 
-    mp.payment.get({id: req.body.data.id})
-    res.end("ok");
-    return res.status(201);
+    mp.payment.get({id: req.body.data.id});
+    res.status(201);
 }
 
 module.exports = indexCtrl;
