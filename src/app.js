@@ -5,7 +5,7 @@ const { parseWithoutProcessing } = require('handlebars');
 
 const app = express();
 
-app.set('port', dot.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000);
 
 app.set('views', path.join(__dirname, 'views'));
 
