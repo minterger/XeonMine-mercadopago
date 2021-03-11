@@ -68,8 +68,8 @@ indexCtrl.feedbackPost = async (req, res) => {
     // });
     // req.on("end", () => {
     //     console.log(body, "webhook response");
-    //     res.end("ok");
     // });
+    res.end("ok");
     return res.status(201);
 }
 
