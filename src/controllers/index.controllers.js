@@ -44,19 +44,21 @@ indexCtrl.datosDonar = async (req, res) => {
     try {
         const response = await mp.preferences.create(preference);
         // console.log(response);
-        console.log(response.body.id);
+        console.log(response.body);
         res.redirect(response.body.init_point);
     } catch(err) {
         res.send(err);
     }
 }
 
-indexCtrl.feedback = (req, res) => {
+indexCtrl.feedback = async (req, res) => {
+    const paymentData = await mp.payment.get(req.query.payment_id)
     res.json({
         Payment: req.query.payment_id,
         Status: req.query.status,
         MerchantOrder: req.query.merchant_order_id,
-        Data: req.query
+        // Data: req.query,
+        paymentData
     });
 }
 
@@ -66,8 +68,8 @@ indexCtrl.feedbackPost = async (req, res, next) => {
         let id = req.body.data.id;
         mp.payment.get(id)
         .then((data) => {
-            console.log(data.id);
-            res.status(200);
+            console.log(data);
+            res.sendStatus(200);
         })
         .catch((err) => {
             console.error(err);
