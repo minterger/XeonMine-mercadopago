@@ -44,6 +44,7 @@ indexCtrl.datosDonar = async (req, res) => {
     try {
         const response = await mp.preferences.create(preference);
         // console.log(response);
+        console.log(response.body.id);
         res.redirect(response.body.init_point);
     } catch(err) {
         res.send(err);
@@ -63,9 +64,9 @@ indexCtrl.feedbackPost = async (req, res, next) => {
     if (req.body.data) {
         console.log(req.body);
         let id = req.body.data.id;
-        mp.payment.get(id)
+        mp.payment.get(id);
         .then((data) => {
-            console.log(data)
+            console.log(data.id);
             res.status(200);
         })
         .catch((err) => {
