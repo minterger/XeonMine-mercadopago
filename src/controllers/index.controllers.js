@@ -64,7 +64,7 @@ indexCtrl.feedbackPost = async (req, res, next) => {
     if (req.body.data) {
         console.log(req.body);
         let id = req.body.data.id;
-        mp.payment.get(id);
+        mp.payment.get(id)
         .then((data) => {
             console.log(data.id);
             res.status(200);
