@@ -3,7 +3,7 @@ const mp = require("mercadopago");
 const fetch = require('node-fetch')
 
 mp.configure({
-    access_token:"APP_USR-4037128541236505-031100-fd80ab21df0fc65d42f47a53c024062e-726591572"
+    access_token:"APP_USR-1014301261836371-031015-daaa0cccbdf61be55b9b5e8b72d4e957-726590435"
 })
 const getFullUrl = (req) =>{
     const url = req.protocol + '://' + req.get('host');
