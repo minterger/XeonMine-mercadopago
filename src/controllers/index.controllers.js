@@ -1,9 +1,8 @@
 const indexCtrl = {}
 const mp = require("mercadopago");
 const Donator = require('../models/Dontator');
-const LasDonation = require('../models/LastDonation');
-const md5 = require('md5');
 const LastDonation = require("../models/LastDonation");
+const md5 = require('md5');
 
 mp.configure({
     access_token:"APP_USR-1014301261836371-031015-daaa0cccbdf61be55b9b5e8b72d4e957-726590435"
@@ -79,7 +78,7 @@ indexCtrl.feedback = async (req, res) => {
     const status = req.query.status;
     switch (status) {
         case 'approved':
-            const lastDonation = await LastDonation.findOne({external_reference})
+            const lastDonation = await LastDonation.findOne({external_reference});
             const donator = await Donator.findOne({name: lastDonation.name});
             if (lastDonation.statusLast == 0) {
                 if (!donator) {
@@ -137,7 +136,7 @@ indexCtrl.feedbackPost = async (req, res, next) => {
             const status = data.response.status;
             switch (status) {
                 case 'approved':
-                    const lastDonation = await LastDonation.findOne({external_reference})
+                    const lastDonation = await LastDonation.findOne({external_reference});
                     const donator = await Donator.findOne({name: lastDonation.name});
                     if (lastDonation.statusLast == 0) {
                         if (!donator) {
