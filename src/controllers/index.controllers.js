@@ -113,8 +113,8 @@ indexCtrl.feedbackPost = async (req, res, next) => {
         console.log(req.body);
         console.log('\n\nEspacio\n');
         let id = req.body.data.id;
-        mp.payment.get(id)
-        .then((data) => {
+        try {
+            const data = await mp.payment.get(id)
             console.log(data.response.external_reference);
             console.log(data.response.status)
             const external_reference = data.response.external_reference;
@@ -127,10 +127,9 @@ indexCtrl.feedbackPost = async (req, res, next) => {
             // res.status(200).send('ok');
             res.status(200).end();
             // res.sendStatus(200);
-        })
-        .catch((err) => {
+        } catch (error) {
             console.error(err);
-        })
+        }
     }
 }
 
