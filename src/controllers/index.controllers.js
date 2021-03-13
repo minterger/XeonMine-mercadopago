@@ -1,6 +1,6 @@
 const indexCtrl = {}
 const mp = require("mercadopago");
-// const Donator = require('../models/Dontator');
+const Donator = require('../models/Dontator');
 const md5 = require('md5')
 
 mp.configure({
@@ -13,30 +13,33 @@ const getFullUrl = (req) =>{
 }
 
 
-indexCtrl.renderIndex = (req, res) => {
-    res.render('index');
+indexCtrl.renderIndex = async (req, res) => {
+    const top = await Donator.find({statusTop: 1}).sort({totalDonation: -1}).limit(5)
+    const last = await Donator.find({statusLast: 1}).sort({updatedAt: -1}).limit(5)
+    res.render('index', {top, last});
 }
 
 indexCtrl.datosDonar = async (req, res) => {
     const {name, email, cantidad} = req.body;
-    // const donatorExist = await Donator.find({name});
+    const donatorExist = await Donator.findOne({name});
     const external_reference = `${Math.floor(Math.random() * 99999999)}`
-    // if (!donatorExist) {
-    //     const newDonator = new Donator({
-    //         name,
-    //         email,
-    //         external_reference,
-    //         totalDonation: catidad,
-    //         lastDonation: cantidad
-    //     })
-    //     try {
-    //         await newDonator.save()
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // } else {
-    //     await Donator.findOneAndUpdate({name}, {external_reference});
-    // }
+    if (!donatorExist) {
+        const newDonator = new Donator({
+            name,
+            email,
+            external_reference,
+            totalDonation: catidad,
+            lastDonation: cantidad,
+            gravatar: `${md5(email)}`
+        })
+        try {
+            await newDonator.save()
+        } catch (error) {
+            console.error(error);
+        }
+    } else {
+        await Donator.findOneAndUpdate({name}, {external_reference, lastDonation: catidad, statusLast: 0});
+    }
     let preference = {
         items: [
             {
@@ -77,9 +80,13 @@ indexCtrl.datosDonar = async (req, res) => {
 indexCtrl.feedback = async (req, res) => {
     // const paymentData = await mp.payment.get(req.query.payment_id)
     const payment = req.query.payment_id;
+    const external_reference = req.query.external_reference;
     const status = req.query.status;
     switch (status) {
         case 'approved':
+            const { topDonation, lastDonation } = await Donator.findOne({external_reference});
+            let totalDonation = topDonation + lastDonation;
+            await Donator.findOneAndUpdate({external_reference}, {statusLast: 1, statusTop: 1, topDonation: totalDonation});
             res.render('success', { payment, data: req.query })
             break;
         case 'in_process':
@@ -110,6 +117,13 @@ indexCtrl.feedbackPost = async (req, res, next) => {
         .then((data) => {
             console.log(data.response.external_reference);
             console.log(data.response.status)
+            const external_reference = data.response.external_reference;
+            const status = data.response.status;
+            if (status == 'approved') {
+                const { topDonation, lastDonation } = await Donator.findOne({external_reference});
+                let totalDonation = topDonation + lastDonation;
+                await Donator.findOneAndUpdate({external_reference}, {statusLast: 1, statusTop: 1, topDonation: totalDonation});
+            }        
             // res.status(200).send('ok');
             res.status(200).end();
             // res.sendStatus(200);

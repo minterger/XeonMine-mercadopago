@@ -5,7 +5,7 @@ const donatorSchema = new Schema({
     email: { type: String, unique: true, required: true, lowercase: true },
     gravatar: { type: String, unique: true, required: true },
     external_reference: { type: String, unique: true, required: true },
-    status: { type: Number, default: 0 },
+    statusTop: { type: Number, default: 0 },
     statusLast: {type: Number, default: 0},
     totalDonation: { type: Number },
     lastDonation: { type: Number }

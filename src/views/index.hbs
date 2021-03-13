@@ -14,6 +14,13 @@
                         <h3 class="text-center pt-1">Top Donadores</h3>
                     </div>
                     <div class="card-body">
+                        {{#each top}}
+                        <div class="d-flex align-items-center py-3">
+                            <img src="https://www.gravatar.com/avatar/{{gravatar}}?s=60&default=retro" alt="" srcset="">
+                            <span class="me-auto ps-3">Top 1 - {{name}}</span>
+                            <span class="ms-auto">${{topDonation}}</span>
+                        </div>
+                        {{/each}}
                         <div class="d-flex align-items-center py-3">
                             <img src="https://www.gravatar.com/avatar/a7fe5103e43c206b0346bad57729386e?s=60&default=retro" alt="" srcset="">
                             <span class="me-auto ps-3">Top 1 - Minterger</span>
@@ -49,6 +56,13 @@
                         <h3 class="text-center pt-1">5 Ultimos Donadores</h3>
                     </div>
                     <div class="card-body">
+                        {{#each last}}
+                        <div class="d-flex align-items-center py-3">
+                            <img src="https://www.gravatar.com/avatar/{{gravatar}}?s=60&default=retro" alt="" srcset="">
+                            <span class="me-auto ps-3">{{name}}</span>
+                            <span class="ms-auto">${{lastDonation}}</span>
+                        </div>
+                        {{/each}}
                         <div class="d-flex align-items-center py-3">
                             <img src="https://www.gravatar.com/avatar/a7fe5103e43c206b0346bad57729386e?s=60&default=retro" alt="" srcset="">
                             <span class="me-auto ps-3">Minterger</span>
