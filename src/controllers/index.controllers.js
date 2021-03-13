@@ -106,8 +106,8 @@ indexCtrl.feedback = async (req, res) => {
             res.render('pending', { payment, data: req.query })
             break;
         case 'rejected':
-            await mp.payment.cancel(payment)
-            await LastDonation.findOneAndDelete({external_reference})
+            // await mp.payment.cancel(payment)
+            // await LastDonation.findOneAndDelete({external_reference})
             res.render('failed', { payment, data: req.query })
             break;
         default:
@@ -152,8 +152,13 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                 case 'in_process':
                     break;
                 case 'rejected':
-                    await mp.payment.cancel(id)
-                    await LastDonation.findOneAndDelete({external_reference})
+                    // const json = {
+                    //     id,
+                    //     status: 'cancelled'
+                    // }
+                    // const update = await mp.payment.update(json)
+                    // console.log(update)
+                    // await LastDonation.findOneAndDelete({external_reference})
                     break;
                 default:
                     break;        
