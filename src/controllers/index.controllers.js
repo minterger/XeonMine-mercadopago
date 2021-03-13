@@ -14,8 +14,8 @@ const getFullUrl = (req) =>{
 
 
 indexCtrl.renderIndex = async (req, res) => {
-    const top = await Donator.find({statusTop: 1}).sort({totalDonation: -1}).limit(5)
-    const last = await Donator.find({statusLast: 1}).sort({updatedAt: -1}).limit(5)
+    const top = await Donator.find({statusTop: 1}).sort({totalDonation: -1}).limit(5).lean()
+    const last = await Donator.find({statusLast: 1}).sort({updatedAt: -1}).limit(5).lean()
     res.render('index', {top, last});
 }
 
@@ -28,7 +28,6 @@ indexCtrl.datosDonar = async (req, res) => {
             name,
             email,
             external_reference,
-            totalDonation: catidad,
             lastDonation: cantidad,
             gravatar: `${md5(email)}`
         })
@@ -38,7 +37,7 @@ indexCtrl.datosDonar = async (req, res) => {
             console.error(error);
         }
     } else {
-        await Donator.findOneAndUpdate({name}, {external_reference, lastDonation: catidad, statusLast: 0});
+        await Donator.findOneAndUpdate({name}, {external_reference, lastDonation: cantidad, statusLast: 0});
     }
     let preference = {
         items: [
@@ -84,9 +83,11 @@ indexCtrl.feedback = async (req, res) => {
     const status = req.query.status;
     switch (status) {
         case 'approved':
-            const { topDonation, lastDonation } = await Donator.findOne({external_reference});
-            let totalDonation = topDonation + lastDonation;
-            await Donator.findOneAndUpdate({external_reference}, {statusLast: 1, statusTop: 1, topDonation: totalDonation});
+            const donator = await Donator.findOne({external_reference});
+            if (donator.statusLast == 0) {
+                const totalDonation = parseFloat(donator.totalDonation) + parseFloat(donator.lastDonation);
+                await Donator.findOneAndUpdate({external_reference}, {statusLast: 1, statusTop: 1, totalDonation});
+            }
             res.render('success', { payment, data: req.query })
             break;
         case 'in_process':
@@ -119,10 +120,10 @@ indexCtrl.feedbackPost = async (req, res, next) => {
             console.log(data.response.status)
             const external_reference = data.response.external_reference;
             const status = data.response.status;
-            if (status == 'approved') {
-                const { topDonation, lastDonation } = await Donator.findOne({external_reference});
-                let totalDonation = topDonation + lastDonation;
-                await Donator.findOneAndUpdate({external_reference}, {statusLast: 1, statusTop: 1, topDonation: totalDonation});
+            const donator = await Donator.findOne({external_reference});
+            if (status == 'approved' && donator.statusLast == 0) {
+                const totalDonation = parseFloat(donator.totalDonation) + parseFloat(donator.lastDonation);
+                await Donator.findOneAndUpdate({external_reference}, {statusLast: 1, statusTop: 1, totalDonation});
             }        
             // res.status(200).send('ok');
             res.status(200).end();
