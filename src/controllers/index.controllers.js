@@ -75,11 +75,21 @@ indexCtrl.datosDonar = async (req, res) => {
 }
 
 indexCtrl.feedback = async (req, res) => {
-    const paymentData = await mp.payment.get(req.query.payment_id)
+    // const paymentData = await mp.payment.get(req.query.payment_id)
     const payment = req.query.payment_id;
     const status = req.query.status;
-    if (status == 'approved') {
-        res.render('success', { payment })
+    switch (status) {
+        case 'approved':
+            res.render('success', { payment, data: req.query })
+            break;
+        case 'in_process':
+            res.render('pending', { payment, data: req.query })
+            break;
+        case 'rejected':
+            res.render('failed', { payment, data: req.query })
+            break;
+        default:
+            break;
     }
     // res.json({
     //     Status: req.query.status,
