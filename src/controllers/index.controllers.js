@@ -38,8 +38,8 @@ indexCtrl.datosDonar = async (req, res) => {
     let preference = {
         items: [
             {
-                title: `${name}`,
-                description: `Gracias por donar ${email}`,
+                title: `Donacion XeonMine`,
+                description: `Donacion de parte de nombre: ${name}, email: ${email}`,
                 quantity: 1,
                 currency_id: 'ARS',
                 unit_price: parseFloat(cantidad)
