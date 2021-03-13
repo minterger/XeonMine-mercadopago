@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const donatorSchema = new Schema({
-    name: { type: String, unique: true, required: true },
+    name: { type: String, unique: true, required: true, uppercase: true},
     email: { type: String, unique: true, required: true, lowercase: true },
     gravatar: { type: String, unique: true, required: true },
     totalDonation: { type: Number },

@@ -15,7 +15,7 @@ const getFullUrl = (req) =>{
 
 
 indexCtrl.renderIndex = async (req, res) => {
-    const top = await Donator.find({statusTop: 1}).sort({totalDonation: -1}).limit(5).lean()
+    const top = await Donator.find({}).sort({totalDonation: -1}).limit(5).lean()
     const last = await LastDonation.find({statusLast: 1}).sort({updatedAt: -1}).limit(5).lean()
     res.render('index', {top, last});
 }
@@ -82,7 +82,7 @@ indexCtrl.feedback = async (req, res) => {
             const donator = await Donator.findOne({name: lastDonation.name});
             if (lastDonation.statusLast == 0) {
                 if (!donator) {
-                    const newDonator = new Donation({
+                    const newDonator = new Donator({
                         name: lastDonation.name,
                         email: lastDonation.email,
                         totalDonation: lastDonation.lastDonation,
@@ -140,7 +140,7 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                     const donator = await Donator.findOne({name: lastDonation.name});
                     if (lastDonation.statusLast == 0) {
                         if (!donator) {
-                            const newDonator = new Donation({
+                            const newDonator = new Donator({
                                 name: lastDonation.name,
                                 email: lastDonation.email,
                                 totalDonation: lastDonation.lastDonation,
@@ -166,7 +166,7 @@ indexCtrl.feedbackPost = async (req, res, next) => {
             // res.status(200).send('ok');
             // res.sendStatus(200);
         } catch (error) {
-            console.error(err);
+            console.error(error);
         }
     }
 }
