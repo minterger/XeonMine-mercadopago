@@ -19,7 +19,7 @@ app.engine('hbs', exphbs({
 }))
 app.set('view engine', 'hbs')
 
-app.use(require('./routes/index.js'));
+app.use(require('./routes/index.routes'));
 
 app.use(express.static(path.join(__dirname, 'public')));
 

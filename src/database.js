@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/app-donar', {
+mongoose.connect('mongodb+srv://admin:Mactroll1!@cluster0.9toto.mongodb.net/test', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
