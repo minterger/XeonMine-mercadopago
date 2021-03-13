@@ -106,21 +106,14 @@ indexCtrl.feedback = async (req, res) => {
             res.render('pending', { payment, data: req.query })
             break;
         case 'rejected':
-            // await LastDonation.findOneAndDelete({external_reference})
+            await mp.payment.cancel(payment)
+            await LastDonation.findOneAndDelete({external_reference})
             res.render('failed', { payment, data: req.query })
             break;
         default:
             res.render('failed', { payment, data: req.query })
             break;
     }
-    // res.json({
-    //     Status: req.query.status,
-    //     MerchantOrder: req.query.merchant_order_id,
-    //     // Data: req.query,
-    //     Payment: req.query.payment_id,
-    //     paymentReference: paymentData.response.external_reference,
-    //     paymentStatus: paymentData.response.status
-    // });
 }
 
 indexCtrl.feedbackPost = async (req, res, next) => {
@@ -159,6 +152,8 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                 case 'in_process':
                     break;
                 case 'rejected':
+                    await mp.payment.cancel(id)
+                    await LastDonation.findOneAndDelete({external_reference})
                     break;
                 default:
                     break;        
