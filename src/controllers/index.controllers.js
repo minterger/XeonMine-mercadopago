@@ -110,6 +110,7 @@ indexCtrl.feedback = async (req, res) => {
             res.render('failed', { payment, data: req.query })
             break;
         default:
+            res.redirect('/')
             break;
     }
     // res.json({
