@@ -5,8 +5,14 @@ const LastDonation = require("../models/LastDonation");
 const md5 = require('md5');
 
 mp.configure({
+    sandbox: true,
     access_token:"APP_USR-1014301261836371-031015-daaa0cccbdf61be55b9b5e8b72d4e957-726590435"
 })
+
+const sumarDias = (fecha, dias) => {
+    fecha.setDate(fecha.getDate() + dias);
+    return fecha.toISOString();
+}
 const getFullUrl = (req) =>{
     const url = req.protocol + '://' + req.get('host');
     // console.log(url)
@@ -38,7 +44,7 @@ indexCtrl.datosDonar = async (req, res) => {
     let preference = {
         items: [
             {
-                title: `Donacion XeonMine`,
+                title: `Donacion XeonMine Server`,
                 description: `Donacion de parte de nombre: ${name}, email: ${email}`,
                 quantity: 1,
                 currency_id: 'ARS',
@@ -50,6 +56,18 @@ indexCtrl.datosDonar = async (req, res) => {
             email: `${email}`
         },
         external_reference,
+        date_of_expiration: sumarDias(new Date(), 3),
+        statement_descriptor: 'XeonMine Server',
+        payment_methods: {
+            excluded_payment_types: [
+                {
+                    id: 'ticket'
+                },
+                {
+                    id: 'atm'
+                }
+            ],
+        },
         notification_url: `${getFullUrl(req)}/postfeedback`,
         auto_return: "all",
         back_urls: {
@@ -106,11 +124,11 @@ indexCtrl.feedback = async (req, res) => {
             res.render('pending', { payment, data: req.query })
             break;
         case 'rejected':
-            // await mp.payment.cancel(payment)
-            // await LastDonation.findOneAndDelete({external_reference})
+            await LastDonation.findOneAndDelete({external_reference})
             res.render('failed', { payment, data: req.query })
             break;
         default:
+            await LastDonation.findOneAndDelete({external_reference})
             res.render('failed', { payment, data: req.query })
             break;
     }
@@ -152,15 +170,9 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                 case 'in_process':
                     break;
                 case 'rejected':
-                    // const json = {
-                    //     id,
-                    //     status: 'cancelled'
-                    // }
-                    // const update = await mp.payment.update(json)
-                    // console.log(update)
-                    // await LastDonation.findOneAndDelete({external_reference})
                     break;
                 default:
+                    await LastDonation.findOneAndDelete({external_reference})
                     break;        
             }
             // res.status(200).send('ok');
