@@ -1,3 +1,8 @@
 .success {
     height: 90vh;
 }
+
+.circle {
+    border-radius: 100cm;
+    border: 2px solid tomato;
+}
