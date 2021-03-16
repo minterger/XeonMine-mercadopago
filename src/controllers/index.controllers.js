@@ -104,7 +104,7 @@ indexCtrl.feedback = async (req, res) => {
                     const newDonator = new Donator({
                         name: lastDonation.name,
                         email: lastDonation.email,
-                        userId: lasDonation.userId,
+                        userId: lastDonation.userId,
                         totalDonation: lastDonation.lastDonation,
                         gravatar: `${md5(lastDonation.email)}`
                     })
@@ -151,12 +151,13 @@ indexCtrl.feedbackPost = async (req, res, next) => {
             switch (status) {
                 case 'approved':
                     const lastDonation = await LastDonation.findOne({external_reference});
-                    const donator = await Donator.findOne({name: lastDonation.name});
+                    const donator = await Donator.findOne({userId: lastDonation.userId});
                     if (lastDonation.statusLast == 0) {
                         if (!donator) {
                             const newDonator = new Donator({
                                 name: lastDonation.name,
                                 email: lastDonation.email,
+                                userId: lastDonation.userId,
                                 totalDonation: lastDonation.lastDonation,
                                 gravatar: `${md5(lastDonation.email)}`
                             })
