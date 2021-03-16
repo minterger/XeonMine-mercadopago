@@ -13,7 +13,9 @@ hbs.handlebars.registerHelper('text-status', (statusLast) => {
         case 3:
             return 'text-danger'
             break;
-
+        case 0:
+            return 'text-danger'
+            break;
         default:
             break;
     }
@@ -21,7 +23,7 @@ hbs.handlebars.registerHelper('text-status', (statusLast) => {
 })
 
 hbs.handlebars.registerHelper('findStatus', (statusLast) => {
-    if (statusLast == 3) {
+    if (statusLast == 3 || statusLast == 0) {
         return true
     } else {
         return false
