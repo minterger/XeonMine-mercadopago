@@ -6,6 +6,7 @@ const LasDonationSchema = new Schema({
     userId: { type: String, required: true },
     gravatar: { type: String, required: true },
     external_reference: { type: String, unique: true, required: true },
+    status: { type: String, required: true, default: 'No Pagado' },
     statusLast: {type: Number, default: 0},
     lastDonation: { type: Number }
 }, {

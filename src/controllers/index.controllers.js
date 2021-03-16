@@ -113,7 +113,7 @@ indexCtrl.feedback = async (req, res) => {
                     } catch (error) {
                         console.error(error);
                     }
-                    await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1});
+                    await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1, status: 'Pagado'});
                 } else {
                     const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
                     await Donator.findByIdAndUpdate(donator._id, {totalDonation})
@@ -123,9 +123,11 @@ indexCtrl.feedback = async (req, res) => {
             res.render('success', { payment, data: req.query })
             break;
         case 'in_process':
+            await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
             res.render('pending', { payment, data: req.query })
             break;
         case 'rejected':
+            await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
             await LastDonation.findOneAndDelete({external_reference})
             res.render('failed', { payment, data: req.query })
             break;
@@ -169,7 +171,7 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                                     gravatar: `${md5(lastDonation.email)}`
                                 })
                                 await newDonator.save()
-                                await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1});
+                                await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1, status: 'Pagado'});
                             } else {
                                 const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
                                 await Donator.findByIdAndUpdate(donator._id, {totalDonation})
@@ -178,8 +180,10 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                         }
                         break;
                     case 'in_process':
+                        await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
                         break;
                     case 'rejected':
+                        await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
                         break;
                     default:
                         await LastDonation.findOneAndDelete({external_reference})

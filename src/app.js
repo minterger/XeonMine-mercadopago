@@ -45,6 +45,9 @@ app.use((req, res, next) => {
     next();
 })
 
+// helpers
+require('./helpers/hbs');
+
 // routes
 app.use(require('./routes/index.routes'));
 app.use(require('./routes/user.routes'));

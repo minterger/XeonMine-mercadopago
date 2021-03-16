@@ -14,6 +14,12 @@
 
 .line {
     border-top: 1px solid slategrey;
+    border-bottom: 1px solid rgb(192, 207, 223);
+}
+
+.border-row {
+    padding-bottom: 5px;
+    border-top: 1px solid rgb(192, 207, 223);
 }
 
 .bx-padding {

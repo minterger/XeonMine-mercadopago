@@ -1,12 +1,30 @@
 <div class="container-sm success">
     <div class="row">
         <div class="col-md-2 d-flex justify-content-center py-4">
-            <img class="circle" src="https://www.gravatar.com/avatar/{{user.gravatar}}?s=100&d=robohash" alt="">
+            <img class="circle" src="https://www.gravatar.com/avatar/{{donator.gravatar}}?s=100&d=robohash" alt="">
         </div>
         <div class="col d-flex flex-column justify-content-center py-4">
-            <p class="profile"><strong>Nickname:</strong> {{user.name}}</p>
-            <p class="profile"><strong>Email:</strong> {{user.email}}</p>
+            <p class="profile"><strong>Nickname:</strong> {{donator.name}}</p>
+            <p class="profile"><strong>Email:</strong> {{donator.email}}</p>
         </div>
     </div>
-    <div class="container-fluid line"></div>
+    <div class="container-fluid line">
+        <div class="row py-2">
+            <div class="col d-flex align-items-center justify-content-center">Titulo</div>
+            <div class="col d-flex align-items-center justify-content-center">Estado</div>
+                <div class="col d-flex align-items-center justify-content-center">Botones</div>
+        </div>
+        {{#each lastdonation}}
+        <div class="row border-row pt-2">
+            <div class="col d-flex align-items-center justify-content-center">Donacion por ${{lastDonation}}</div>
+            <div class="col d-flex align-items-center justify-content-center {{text-status statusLast}}">{{status}}</div>
+            <div class="col text-center">
+                <button class="btn btn-sm btn-success">Ver</button>
+                {{#if (findStatus statusLast)}}
+                <button class="btn btn-sm btn-danger"><i class='bx bxs-trash-alt'></i></button>
+                {{/if}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
 </div>

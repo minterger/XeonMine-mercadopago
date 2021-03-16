@@ -1,6 +1,7 @@
 const userCtrl = {};
 
 const User = require('../models/User');
+const LastDonation = require('../models/LastDonation')
 const passport = require('passport')
 const md5 = require('md5')
 
@@ -48,8 +49,10 @@ userCtrl.registerUser = async (req, res) => {
     }
 }
 
-userCtrl.profile = (req, res) => {
-    res.render('user/profile', { userId: req.params.id});
+userCtrl.profile = async (req, res) => {
+    const lastdonation = await LastDonation.find({ userId: req.params.id }).lean();
+    const donator = await User.findById(req.params.id).lean();
+    res.render('user/profile', { donator, lastdonation});
 }
 
 userCtrl.logout = (req, res) => {
