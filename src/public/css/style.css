@@ -16,6 +16,10 @@
     border-top: 1px solid slategrey;
 }
 
+.bx-padding {
+    padding-left: 2px;
+}
+
 .circle {
     border-radius: 100cm;
     margin: 0;
