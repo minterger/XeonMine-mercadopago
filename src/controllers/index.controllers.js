@@ -19,7 +19,6 @@ const getFullUrl = (req) =>{
     return url;
 }
 
-
 indexCtrl.renderIndex = async (req, res) => {
     const top = await Donator.find({}).sort({totalDonation: -1}).limit(5).lean()
     const last = await LastDonation.find({statusLast: 1}).sort({updatedAt: -1}).limit(5).lean()
@@ -59,7 +58,6 @@ indexCtrl.datosDonar = async (req, res) => {
             email: `${email}`
         },
         external_reference,
-        date_of_expiration: sumarDias(new Date(), 3),
         statement_descriptor: 'XeonMine Server',
         payment_methods: {
             excluded_payment_types: [
@@ -100,7 +98,7 @@ indexCtrl.feedback = async (req, res) => {
     switch (status) {
         case 'approved':
             const lastDonation = await LastDonation.findOne({external_reference});
-            const donator = await Donator.findOne({name: lastDonation.name});
+            const donator = await Donator.findOne({userId: lastDonation.userId});
             if (lastDonation.statusLast == 0) {
                 if (!donator) {
                     const newDonator = new Donator({
