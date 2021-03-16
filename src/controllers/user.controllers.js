@@ -50,7 +50,7 @@ userCtrl.registerUser = async (req, res) => {
 }
 
 userCtrl.profile = async (req, res) => {
-    const lastdonation = await LastDonation.find({ userId: req.params.id }).lean();
+    const lastdonation = await LastDonation.find({ userId: req.params.id }).sort({updatedAt: -1}).lean();
     const donator = await User.findById(req.params.id).lean();
     res.render('user/profile', { donator, lastdonation});
 }
