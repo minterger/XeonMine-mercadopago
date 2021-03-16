@@ -1,8 +1,9 @@
 const { Schema, model } = require('mongoose');
 
 const LasDonationSchema = new Schema({
-    name: { type: String, required: true, uppercase: true },
+    name: { type: String, required: true},
     email: { type: String, required: true, lowercase: true },
+    userId: { type: String, required: true },
     gravatar: { type: String, required: true },
     external_reference: { type: String, unique: true, required: true },
     statusLast: {type: Number, default: 0},

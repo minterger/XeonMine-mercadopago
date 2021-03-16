@@ -1,8 +1,24 @@
 .success {
-    height: 90vh;
+    min-height: 90vh;
+    max-height: none;
+}
+
+.profile{
+    margin: 0;
+    padding: 0;
+}
+
+.height {
+    min-height: 50vh;
+}
+
+.line {
+    border-top: 1px solid slategrey;
 }
 
 .circle {
     border-radius: 100cm;
-    border: 2px solid tomato;
+    margin: 0;
+    padding: 2px;
+    background-image: linear-gradient( 109.6deg,  rgba(255,174,0,1) 11.2%, rgba(255,0,0,1) 100.2% );
 }

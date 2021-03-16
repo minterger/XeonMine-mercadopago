@@ -1,13 +1,13 @@
 
-    <div class="container py-5 my-5">
+    <div class="container-fluid py-5 my-5">
         <h1 class="text-center">Dona para que XeonMine vuelva</h1>
         <div class="d-flex justify-content-center">
             <a href="/#pagar" class="btn btn-outline-primary btn-lg mt-3" data-bs-toggle="modal" data-bs-target="#pagarModal">Donar Al Servidor</a>
         </div>
     </div>
 
-    <div class="container-sm">
-        <div class="row d-flex justify-content-center">
+    <div class="container-sm height">
+        <div class="row justify-content-center">
             <div class="col-md-5 my-3">
                 <div class="card">
                     <div class="card-header">
@@ -16,7 +16,7 @@
                     <div class="card-body">
                         {{#each top}}
                         <div class="d-flex align-items-center py-3">
-                            <img class="circle" src="https://www.gravatar.com/avatar/{{gravatar}}?s=55&default=wavatar" alt="" srcset="">
+                            <img class="circle" src="https://www.gravatar.com/avatar/{{gravatar}}?s=55&d=robohash" alt="" srcset="">
                             <span class="me-auto ps-3">Top - {{name}}</span>
                             <span class="ms-auto">${{totalDonation}}</span>
                         </div>
@@ -33,7 +33,7 @@
                     <div class="card-body">
                         {{#each last}}
                         <div class="d-flex align-items-center py-3">
-                            <img class="circle" src="https://www.gravatar.com/avatar/{{gravatar}}?s=55&default=wavatar" alt="" srcset="">
+                            <img class="circle" src="https://www.gravatar.com/avatar/{{gravatar}}?s=55&d=robohash" alt="" srcset="">
                             <span class="me-auto ps-3">{{name}}</span>
                             <span class="ms-auto">${{lastDonation}}</span>
                         </div>

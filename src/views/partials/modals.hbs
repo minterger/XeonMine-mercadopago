@@ -25,23 +25,29 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    {{#if user}}
                     <form id="donarForm" action="/donar" method="POST">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Nick de Minecraft o Discord</label>
-                            <input type="text" name="name" class="form-control" id="username">
+                            <label for="username" class="form-label">Nickname</label>
+                            <input type="text" class="form-control" id="username" value="{{user.name}}" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" id="email">
+                            <input type="email" class="form-control" id="email" value="{{user.email}}" disabled>
                         </div>
                         <div class="mb-3">
                             <label for="cantidad" class="form-label">Cantidad</label>
                             <input type="number" name="cantidad" class="form-control" id="cantidad">
                         </div>
-                    </form>                
+                    </form>
+                    {{else}}
+                    <strong>Registrate para donar <a href="/register">Registrar</a> o inicia sesion <a href="/login">Iniciar Sesion</a></strong>
+                    {{/if}}             
                 </div>
                 <div class="modal-footer">
+                    {{#if user}}
                     <button type="submit" form="donarForm" class="btn btn-success ">Pagar</button>
+                    {{/if}}
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>

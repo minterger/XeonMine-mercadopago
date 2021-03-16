@@ -27,11 +27,14 @@ indexCtrl.renderIndex = async (req, res) => {
 }
 
 indexCtrl.datosDonar = async (req, res) => {
-    const {name, email, cantidad} = req.body;
+    const { cantidad } = req.body;
+    const { name, email, _id } = req.user;
+    console.log(name, email, cantidad);
     const external_reference = `${Math.floor(Math.random() * 99999999)}`
     const newDonator = new LastDonation({
         name,
         email,
+        userId: _id,
         external_reference,
         lastDonation: cantidad,
         gravatar: `${md5(email)}`
@@ -103,6 +106,7 @@ indexCtrl.feedback = async (req, res) => {
                     const newDonator = new Donator({
                         name: lastDonation.name,
                         email: lastDonation.email,
+                        userId: lasDonation.userId,
                         totalDonation: lastDonation.lastDonation,
                         gravatar: `${md5(lastDonation.email)}`
                     })
