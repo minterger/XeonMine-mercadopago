@@ -137,51 +137,57 @@ indexCtrl.feedback = async (req, res) => {
 }
 
 indexCtrl.feedbackPost = async (req, res, next) => {
-    if (req.body.data) {
-        console.log(req.body);
-        console.log('\n\nEspacio\n');
-        let id = req.body.data.id;
-        try {
-            const data = await mp.payment.get(id)
-            res.status(200).end();
-            console.log(data.response.external_reference);
-            console.log(data.response.status)
-            const external_reference = data.response.external_reference;
-            const status = data.response.status;
-            switch (status) {
-                case 'approved':
-                    const lastDonation = await LastDonation.findOne({external_reference});
-                    const donator = await Donator.findOne({userId: lastDonation.userId});
-                    if (lastDonation.statusLast == 0) {
-                        if (!donator) {
-                            const newDonator = new Donator({
-                                name: lastDonation.name,
-                                email: lastDonation.email,
-                                userId: lastDonation.userId,
-                                totalDonation: lastDonation.lastDonation,
-                                gravatar: `${md5(lastDonation.email)}`
-                            })
-                            await newDonator.save()
-                            await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1});
-                        } else {
-                            const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
-                            await Donator.findByIdAndUpdate(donator._id, {totalDonation})
-                            await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1});
+    if (req.method == 'POST') {
+        res.status(200).send('ok');
+        if (req.body.data) {
+            console.log(req.body);
+            console.log('\n\nEspacio\n');
+            let id = req.body.data.id;
+            try {
+                const data = await mp.payment.get(id)
+                // res.status(200).end();
+                // res.status(200).send('ok');
+                // res.status(200).json({
+                //     success: true,
+                //     message: 'Works'
+                // })
+                console.log(data.response.external_reference);
+                console.log(data.response.status)
+                const external_reference = data.response.external_reference;
+                const status = data.response.status;
+                switch (status) {
+                    case 'approved':
+                        const lastDonation = await LastDonation.findOne({external_reference});
+                        const donator = await Donator.findOne({userId: lastDonation.userId});
+                        if (lastDonation.statusLast == 0) {
+                            if (!donator) {
+                                const newDonator = new Donator({
+                                    name: lastDonation.name,
+                                    email: lastDonation.email,
+                                    userId: lastDonation.userId,
+                                    totalDonation: lastDonation.lastDonation,
+                                    gravatar: `${md5(lastDonation.email)}`
+                                })
+                                await newDonator.save()
+                                await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1});
+                            } else {
+                                const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
+                                await Donator.findByIdAndUpdate(donator._id, {totalDonation})
+                                await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1});
+                            }
                         }
-                    }
-                    break;
-                case 'in_process':
-                    break;
-                case 'rejected':
-                    break;
-                default:
-                    await LastDonation.findOneAndDelete({external_reference})
-                    break;        
+                        break;
+                    case 'in_process':
+                        break;
+                    case 'rejected':
+                        break;
+                    default:
+                        await LastDonation.findOneAndDelete({external_reference})
+                        break;        
+                }
+            } catch (error) {
+                console.error(error);
             }
-            // res.status(200).send('ok');
-            // res.sendStatus(200);
-        } catch (error) {
-            console.error(error);
         }
     }
 }
