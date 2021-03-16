@@ -128,7 +128,6 @@ indexCtrl.feedback = async (req, res) => {
             break;
         case 'rejected':
             await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
-            await LastDonation.findOneAndDelete({external_reference})
             res.render('failed', { payment, data: req.query })
             break;
         default:
