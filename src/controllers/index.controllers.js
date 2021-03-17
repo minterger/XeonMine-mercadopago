@@ -121,7 +121,7 @@ indexCtrl.feedback = async (req, res) => {
                     await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
                 }
             }
-            res.redirect(`/status/${status}?payment=${payment}&external=${date.external_reference}`);
+            res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
             break;
         case 'in_process':
             await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
