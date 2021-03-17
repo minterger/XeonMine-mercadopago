@@ -6,7 +6,7 @@ const md5 = require('md5');
 
 mp.configure({
     sandbox: true,
-    access_token:"APP_USR-1014301261836371-031015-daaa0cccbdf61be55b9b5e8b72d4e957-726590435"
+    access_token: process.env.TOKENMP
 })
 
 const sumarDias = (fecha, dias) => {
