@@ -28,7 +28,7 @@ indexCtrl.renderIndex = async (req, res) => {
 indexCtrl.datosDonar = async (req, res) => {
     const { cantidad } = req.body;
     const { name, email, _id } = req.user;
-    console.log(name, email, cantidad);
+    // console.log(name, email, cantidad);
     const external_reference = `${Math.floor(Math.random() * 99999999)}`
     const newDonator = new LastDonation({
         name,
@@ -76,9 +76,9 @@ indexCtrl.datosDonar = async (req, res) => {
     try {
         const response = await mp.preferences.create(preference);
         // console.log(response);
-        console.log(response.body);
-        console.log('\n\nEspacio\n');
-        console.log('\n\nEspacio\n');
+        // console.log(response.body);
+        // console.log('\n\nEspacio\n');
+        // console.log('\n\nEspacio\n');
         try {
             newDonator.link = response.body.init_point;
             await newDonator.save()
@@ -140,20 +140,20 @@ indexCtrl.feedback = async (req, res) => {
 indexCtrl.feedbackPost = async (req, res, next) => {
     if (req.method == 'POST') {
         res.status(200).send('ok');
+        // res.status(200).end();
+        // res.status(200).send('ok');
+        // res.status(200).json({
+        //     success: true,
+        //     message: 'Works'
+        // })
         if (req.body.data) {
-            console.log(req.body);
-            console.log('\n\nEspacio\n');
+            // console.log(req.body);
+            // console.log('\n\nEspacio\n');
             let id = req.body.data.id;
             try {
                 const data = await mp.payment.get(id)
-                // res.status(200).end();
-                // res.status(200).send('ok');
-                // res.status(200).json({
-                //     success: true,
-                //     message: 'Works'
-                // })
-                console.log(data.response.external_reference);
-                console.log(data.response.status)
+                // console.log(data.response.external_reference);
+                // console.log(data.response.status)
                 const external_reference = data.response.external_reference;
                 const status = data.response.status;
                 switch (status) {
@@ -207,15 +207,15 @@ indexCtrl.payStatus = async (req, res) => {
         res.status(200)
         const external_reference = `${req.params.external}`
         
-        console.log(external_reference)
+        // console.log(external_reference)
+        // console.log(response.body.results[0])
         
-        console.log(response.body.results[0])
         const payment = response.body.results[0].id;
         const status = response.body.results[0].status;
         switch (status) {
             case 'approved':
                 const lastDonation = await LastDonation.findOne({external_reference});
-                console.log(lastDonation)
+                // console.log(lastDonation)
                 const donator = await Donator.findOne({userId: lastDonation.userId});
                 if (lastDonation.statusLast == 0 || lastDonation.statusLast == 2 || lastDonation.statusLast == 3) {
                     if (!donator) {
