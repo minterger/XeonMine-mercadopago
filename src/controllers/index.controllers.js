@@ -110,7 +110,7 @@ indexCtrl.feedback = async (req, res) => {
                         gravatar: `${md5(lastDonation.email)}`
                     })
                     try {
-                        await newDonator.save()
+                        await newDonator.save();
                     } catch (error) {
                         console.error(error);
                     }
@@ -121,18 +121,35 @@ indexCtrl.feedback = async (req, res) => {
                     await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
                 }
             }
-            res.render('success', { payment, data: req.query })
+            res.redirect(`/status/${status}?payment=${payment}&external=${date.external_reference}`);
             break;
         case 'in_process':
             await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
-            res.render('pending', { payment, data: req.query })
+            res.redirect(`/status/${status}?payment=${payment}&external=${date.external_reference}`);         
             break;
         case 'rejected':
             await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
-            res.render('failed', { payment, data: req.query })
+            res.redirect(`/status/${status}?payment=${payment}&external=${date.external_reference}`);
             break;
         default:
-            res.render('failed', { payment, data: req.query })
+            res.redirect(`/status/${status}?payment=${payment}&external=${date.external_reference}`);
+            break;
+    }
+}
+
+indexCtrl.status = (req, res) => {
+    switch (req.params.status) {
+        case 'approved':
+            res.render('success', {payment: req.query.payment, external_reference: req.query.external});
+            break;
+        case 'in_process':
+            res.render('pending', {payment: req.query.payment, external_reference: req.query.external});
+            break;
+        case 'in_process':
+            res.render('failed', {payment: req.query.payment, external_reference: req.query.external});
+            break;
+        default:
+            res.render('failed', {payment: req.query.payment, external_reference: req.query.external})
             break;
     }
 }
