@@ -8,7 +8,7 @@
             <p class="profile"><strong>Email:</strong> {{donator.email}}</p>
         </div>
     </div>
-    <div class="container-fluid line">
+    {{!-- <div class="container-fluid line">
         <div class="row py-2">
             <div class="col d-flex align-items-center justify-content-center">Titulo</div>
             <div class="col d-flex align-items-center justify-content-center">Estado</div>
@@ -24,5 +24,35 @@
         </div>
         {{>usermodal}}
         {{/each}}
-    </div>
+    </div> --}}
+    <table class="table line">
+        <thead>
+            <tr>
+                <th></th>
+                <th scope="col">Titulo</th>
+                <th scope="col" colspan="2">Estado</th>
+                <th></th>
+                <th scope="col" class="text-center">Botones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each lastdonation}}
+            <tr>
+                <td></td>
+                <td scope="row">Donacion de ${{lastDonation}}</td>
+                <td colspan="2" class="{{text-status statusLast}}">{{status}}</td>
+                <td></td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modal{{external_reference}}">Ver</button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    {{#each lastdonation}}
+
+    {{>usermodal}}
+
+    {{/each}}
 </div>
