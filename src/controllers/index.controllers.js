@@ -29,7 +29,7 @@ indexCtrl.datosDonar = async (req, res) => {
     const { cantidad } = req.body;
     const { name, email, _id } = req.user;
     // console.log(name, email, cantidad);
-    const external_reference = `${Math.floor(Math.random() * 99999999)}`
+    const external_reference = `${Math.floor(Math.random() * 999999999999)}`
     const newDonator = new LastDonation({
         name,
         email,
@@ -96,63 +96,64 @@ indexCtrl.feedback = async (req, res) => {
     const payment = req.query.payment_id;
     const external_reference = req.query.external_reference;
     const status = req.query.status;
-    switch (status) {
-        case 'approved':
-            const lastDonation = await LastDonation.findOne({external_reference});
-            const donator = await Donator.findOne({userId: lastDonation.userId});
-            if (lastDonation.statusLast == 0 || lastDonation.statusLast == 2 || lastDonation.statusLast == 3) {
-                if (!donator) {
-                    const newDonator = new Donator({
-                        name: lastDonation.name,
-                        email: lastDonation.email,
-                        userId: lastDonation.userId,
-                        totalDonation: lastDonation.lastDonation,
-                        gravatar: `${md5(lastDonation.email)}`
-                    })
-                    try {
-                        await newDonator.save();
-                    } catch (error) {
-                        console.error(error);
-                    }
-                    await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
-                } else {
-                    const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
-                    await Donator.findByIdAndUpdate(donator._id, {totalDonation})
-                    await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
-                }
-            }
-            res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
-            break;
-        case 'in_process':
-            await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
-            res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);         
-            break;
-        case 'rejected':
-            await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
-            res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
-            break;
-        default:
-            res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
-            break;
-    }
+    res.redirect('/pay-status/' + external_reference);
+    // switch (status) {
+    //     case 'approved':
+    //         const lastDonation = await LastDonation.findOne({external_reference});
+    //         const donator = await Donator.findOne({userId: lastDonation.userId});
+    //         if (lastDonation.statusLast == 0 || lastDonation.statusLast == 2 || lastDonation.statusLast == 3) {
+    //             if (!donator) {
+    //                 const newDonator = new Donator({
+    //                     name: lastDonation.name,
+    //                     email: lastDonation.email,
+    //                     userId: lastDonation.userId,
+    //                     totalDonation: lastDonation.lastDonation,
+    //                     gravatar: `${md5(lastDonation.email)}`
+    //                 })
+    //                 try {
+    //                     await newDonator.save();
+    //                 } catch (error) {
+    //                     console.error(error);
+    //                 }
+    //                 await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
+    //             } else {
+    //                 const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
+    //                 await Donator.findByIdAndUpdate(donator._id, {totalDonation})
+    //                 await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
+    //             }
+    //         }
+    //         res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
+    //         break;
+    //     case 'in_process':
+    //         await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
+    //         res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);         
+    //         break;
+    //     case 'rejected':
+    //         await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
+    //         res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
+    //         break;
+    //     default:
+    //         res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
+    //         break;
+    // }
 }
 
-indexCtrl.status = (req, res) => {
-    switch (req.params.status) {
-        case 'approved':
-            res.render('success', {payment: req.query.payment, external_reference: req.query.external});
-            break;
-        case 'in_process':
-            res.render('pending', {payment: req.query.payment, external_reference: req.query.external});
-            break;
-        case 'in_process':
-            res.render('failed', {payment: req.query.payment, external_reference: req.query.external});
-            break;
-        default:
-            res.render('failed', {payment: req.query.payment, external_reference: req.query.external})
-            break;
-    }
-}
+// indexCtrl.status = (req, res) => {
+//     switch (req.params.status) {
+//         case 'approved':
+//             res.render('success', {payment: req.query.payment, external_reference: req.query.external});
+//             break;
+//         case 'in_process':
+//             res.render('pending', {payment: req.query.payment, external_reference: req.query.external});
+//             break;
+//         case 'in_process':
+//             res.render('failed', {payment: req.query.payment, external_reference: req.query.external});
+//             break;
+//         default:
+//             res.render('failed', {payment: req.query.payment, external_reference: req.query.external})
+//             break;
+//     }
+// }
 
 indexCtrl.feedbackPost = async (req, res, next) => {
     if (req.method == 'POST') {

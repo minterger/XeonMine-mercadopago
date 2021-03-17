@@ -17,7 +17,7 @@ router.post('/donar', isAuthenticated, datosDonar);
 
 router.get('/feedback', isAuthenticated, feedback);
 
-router.get('/status/:status', isAuthenticated, status)
+// router.get('/status/:status', isAuthenticated, status)
 
 router.post('/postfeedback', feedbackPost);
 
