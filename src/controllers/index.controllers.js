@@ -38,11 +38,6 @@ indexCtrl.datosDonar = async (req, res) => {
         lastDonation: cantidad,
         gravatar: `${md5(email)}`
     })
-    try {
-        await newDonator.save()
-    } catch (error) {
-        console.error(error);
-    }
     let preference = {
         items: [
             {
@@ -211,10 +206,11 @@ indexCtrl.payStatus = async (req, res) => {
         });
         res.status(200)
         const external_reference = `${req.params.external}`
-
+        
         console.log(external_reference)
-    
-        console.log(response.body.results[0].status)
+        
+        console.log(response.body.results[0])
+        const payment = response.body.results[0].collector_id;
         const status = response.body.results[0].status;
         switch (status) {
             case 'approved':
@@ -238,15 +234,15 @@ indexCtrl.payStatus = async (req, res) => {
                         await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
                     }
                 }
-                res.render('success')
+                res.render('success', {payment, external_reference})
                 break;
             case 'in_process':
                 await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
-                res.render('pending')
+                res.render('pending', {payment, external_reference})
                 break;
             case 'rejected':
                 await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
-                res.render('failed')
+                res.render('failed', {payment, external_reference})
                 break;
             default:
                 res.send('error')
