@@ -125,14 +125,14 @@ indexCtrl.feedback = async (req, res) => {
             break;
         case 'in_process':
             await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
-            res.redirect(`/status/${status}?payment=${payment}&external=${date.external_reference}`);         
+            res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);         
             break;
         case 'rejected':
             await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
-            res.redirect(`/status/${status}?payment=${payment}&external=${date.external_reference}`);
+            res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
             break;
         default:
-            res.redirect(`/status/${status}?payment=${payment}&external=${date.external_reference}`);
+            res.redirect(`/status/${status}?payment=${payment}&external=${req.query.external_reference}`);
             break;
     }
 }
