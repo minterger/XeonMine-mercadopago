@@ -29,5 +29,19 @@ hbs.handlebars.registerHelper('findStatus', (statusLast) => {
         return false
     }
 })
+hbs.handlebars.registerHelper('statusPending', (statusLast) => {
+    if (statusLast == 2) {
+        return true
+    } else {
+        return false
+    }
+})
+
+hbs.handlebars.registerHelper('date', (date) => {
+    let fecha = date.toLocaleDateString();
+    let hora = date.toLocaleTimeString();
+    return fecha + " | " + hora;
+})
+
 
 module.exports = hbs

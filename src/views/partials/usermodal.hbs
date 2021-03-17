@@ -1,0 +1,31 @@
+<div class="modal fade" id="modal{{external_reference}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Informacion De Pago</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Referencia de pago: </strong> {{external_reference}}</p>
+        <p><strong>Estado: </strong><span class="{{text-status statusLast}}">{{status}}</span></p>
+        <p><strong>Donado: </strong> ${{lastDonation}}</p>
+        <p><strong>Creado: </strong> {{date createdAt}}</p>
+      </div>
+      <div class="modal-footer">
+        {{#if (findStatus statusLast)}}
+        <a href="{{link}}" class="btn btn-success">Reintentar Pago</a>
+        <form action="/delete-pay/{{_id}}?_method=delete" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <button class="btn btn-danger"><i class='bx bxs-trash-alt'></i></button>
+        </form>
+        {{/if}}
+        {{#if (statusPending statusLast)}}
+        <form action="/pay-status/{{external_reference}}" method="post">
+            <button class="btn btn-success">Verificar Pago</button>
+        </form>
+        {{/if}}
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

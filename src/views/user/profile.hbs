@@ -19,12 +19,10 @@
             <div class="col d-flex align-items-center justify-content-center">Donacion por ${{lastDonation}}</div>
             <div class="col d-flex align-items-center justify-content-center {{text-status statusLast}}">{{status}}</div>
             <div class="col text-center">
-                <button class="btn btn-sm btn-success">Ver</button>
-                {{#if (findStatus statusLast)}}
-                <button class="btn btn-sm btn-danger"><i class='bx bxs-trash-alt'></i></button>
-                {{/if}}
+                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modal{{external_reference}}">Ver</button>
             </div>
         </div>
+        {{>usermodal}}
         {{/each}}
     </div>
 </div>

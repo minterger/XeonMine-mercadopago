@@ -84,6 +84,12 @@ indexCtrl.datosDonar = async (req, res) => {
         console.log(response.body);
         console.log('\n\nEspacio\n');
         console.log('\n\nEspacio\n');
+        try {
+            newDonator.link = response.body.init_point;
+            await newDonator.save()
+        } catch (error) {
+            console.error(error);
+        }
 
         res.redirect(response.body.init_point);
     } catch(err) {
@@ -99,7 +105,7 @@ indexCtrl.feedback = async (req, res) => {
         case 'approved':
             const lastDonation = await LastDonation.findOne({external_reference});
             const donator = await Donator.findOne({userId: lastDonation.userId});
-            if (lastDonation.statusLast == 0) {
+            if (lastDonation.statusLast == 0 || lastDonation.statusLast == 2 || lastDonation.statusLast == 3) {
                 if (!donator) {
                     const newDonator = new Donator({
                         name: lastDonation.name,
@@ -113,11 +119,11 @@ indexCtrl.feedback = async (req, res) => {
                     } catch (error) {
                         console.error(error);
                     }
-                    await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1, status: 'Pagado'});
+                    await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
                 } else {
                     const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
                     await Donator.findByIdAndUpdate(donator._id, {totalDonation})
-                    await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1});
+                    await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
                 }
             }
             res.render('success', { payment, data: req.query })
@@ -131,7 +137,6 @@ indexCtrl.feedback = async (req, res) => {
             res.render('failed', { payment, data: req.query })
             break;
         default:
-            await LastDonation.findOneAndDelete({external_reference})
             res.render('failed', { payment, data: req.query })
             break;
     }
@@ -160,7 +165,7 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                     case 'approved':
                         const lastDonation = await LastDonation.findOne({external_reference});
                         const donator = await Donator.findOne({userId: lastDonation.userId});
-                        if (lastDonation.statusLast == 0) {
+                        if (lastDonation.statusLast == 0 || lastDonation.statusLast == 2 || lastDonation.statusLast == 3) {
                             if (!donator) {
                                 const newDonator = new Donator({
                                     name: lastDonation.name,
@@ -170,11 +175,11 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                                     gravatar: `${md5(lastDonation.email)}`
                                 })
                                 await newDonator.save()
-                                await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1, status: 'Pagado'});
+                                await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
                             } else {
                                 const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
                                 await Donator.findByIdAndUpdate(donator._id, {totalDonation})
-                                await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 1});
+                                await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
                             }
                         }
                         break;
@@ -185,13 +190,81 @@ indexCtrl.feedbackPost = async (req, res, next) => {
                         await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
                         break;
                     default:
-                        await LastDonation.findOneAndDelete({external_reference})
                         break;        
                 }
             } catch (error) {
                 console.error(error);
             }
         }
+    }
+}
+
+indexCtrl.payStatus = async (req, res) => {
+
+	let filters = {
+        external_reference: req.params.external
+    }
+    
+    try {
+        const response = await mp.payment.search({
+            qs: filters
+        });
+        res.status(200)
+        const external_reference = `${req.params.external}`
+
+        console.log(external_reference)
+    
+        console.log(response.body.results[0].status)
+        const status = response.body.results[0].status;
+        switch (status) {
+            case 'approved':
+                const lastDonation = await LastDonation.findOne({external_reference});
+                console.log(lastDonation)
+                const donator = await Donator.findOne({userId: lastDonation.userId});
+                if (lastDonation.statusLast == 0 || lastDonation.statusLast == 2 || lastDonation.statusLast == 3) {
+                    if (!donator) {
+                        const newDonator = new Donator({
+                            name: lastDonation.name,
+                            email: lastDonation.email,
+                            userId: lastDonation.userId,
+                            totalDonation: lastDonation.lastDonation,
+                            gravatar: `${md5(lastDonation.email)}`
+                        })
+                        await newDonator.save()
+                        await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
+                    } else {
+                        const totalDonation = parseFloat(donator.totalDonation) + parseFloat(lastDonation.lastDonation);
+                        await Donator.findByIdAndUpdate(donator._id, {totalDonation})
+                        await LastDonation.findByIdAndUpdate(lastDonation._id, {statusLast: 1, status: 'Pagado'});
+                    }
+                }
+                res.render('success')
+                break;
+            case 'in_process':
+                await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 2, status: 'Pendiente'});
+                res.render('pending')
+                break;
+            case 'rejected':
+                await LastDonation.findOneAndUpdate({external_reference}, {statusLast: 3, status: 'Rechazado'});
+                res.render('failed')
+                break;
+            default:
+                res.send('error')
+                break;        
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+indexCtrl.deletePay = async (req, res) => {
+    try {
+        await LastDonation.findByIdAndDelete(req.params.id);
+        req.flash('success_msg', 'Informacion de Pago Eliminada');
+        res.redirect('/profile/' + req.user._id);
+    } catch (error) {
+        console.error(error);
+        res.redirect('/');
     }
 }
 
