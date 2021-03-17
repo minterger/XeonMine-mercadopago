@@ -210,7 +210,7 @@ indexCtrl.payStatus = async (req, res) => {
         console.log(external_reference)
         
         console.log(response.body.results[0])
-        const payment = response.body.results[0].collector_id;
+        const payment = response.body.results[0].id;
         const status = response.body.results[0].status;
         switch (status) {
             case 'approved':
