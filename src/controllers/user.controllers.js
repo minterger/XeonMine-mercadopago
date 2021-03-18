@@ -52,7 +52,12 @@ userCtrl.registerUser = async (req, res) => {
 userCtrl.profile = async (req, res) => {
     const lastdonation = await LastDonation.find({ userId: req.params.id }).sort({updatedAt: -1}).lean();
     const donator = await User.findById(req.params.id).lean();
-    res.render('user/profile', { donator, lastdonation});
+    if (donator) {
+        res.render('user/profile', { donator, lastdonation});
+    } else {
+        req.flash('error_msg', 'Esta pagina no existe, fuiste redireccionado');
+        res.redirect('/')
+    }
 }
 
 userCtrl.logout = (req, res) => {

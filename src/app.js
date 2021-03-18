@@ -55,5 +55,9 @@ app.use(require('./routes/user.routes'));
 // static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res) => {
+    req.flash('error_msg', 'Esta pagina no existe, fuiste redireccionado');
+    res.redirect('/');
+})
 
 module.exports = app;
