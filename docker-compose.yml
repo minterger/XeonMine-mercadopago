@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  proxy:
+    image: jwilder/nginx-proxy
+    container_name: proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /home/xeonmine/certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+
+  certs:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: certs
+    restart: always
+    volumes:
+      - /home/xeonmine/certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
+      - proxy:rw
+
+  node:
+    image: "node"
+    container_name: XeonMine-Donation
+    restart: always
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - PORT=4040
+      - DATABASE="url de coneccion base de datos mas usuario y contraseña"
+      - TOKENMP="token mercadopago"
+      - NODE_ENV=production
+      - VIRTUAL_HOST=donar.xeonmine.ga
+      - LETSENCRYPT_HOST=donar.xeonmine.ga
+      - LETSENCRYPT_EMAIL=mail@xeonmine.ga
+    expose: 
+      - 4040
+    volumes:
+      - ./:/home/node/app
+    command: "npm start"
