@@ -3,6 +3,7 @@ const mp = require("mercadopago");
 const Donator = require('../models/Dontator');
 const LastDonation = require("../models/LastDonation");
 const md5 = require('md5');
+const uniqid = require('uniqid');
 
 mp.configure({
     sandbox: true,
@@ -29,7 +30,8 @@ indexCtrl.datosDonar = async (req, res) => {
     const { cantidad } = req.body;
     const { name, email, _id } = req.user;
     // console.log(name, email, cantidad);
-    const external_reference = `${Math.floor(Math.random() * 999999999999)}`
+    // const external_reference = `${Math.floor(Math.random() * 999999999999)}`
+    const external_reference = uniqid();
     const newDonator = new LastDonation({
         name,
         email,
