@@ -41,7 +41,7 @@ userCtrl.registerUser = async (req, res) => {
             req.flash('success_msg', 'Te has registrado correctamente');
             res.redirect('/login');
         } catch (error) {
-            errors.push('El email que estas usando ya se encuentra registrado');
+            errors.push('El Email o el Nickname que estas usando ya se encuentra registrado');
             res.render('user/register', {errors})
         }
     } else {
@@ -67,7 +67,7 @@ userCtrl.profile = async (req, res) => {
 
 userCtrl.logout = (req, res) => {
     req.logout();
-    req.flash('success_msg', 'Tu cerraste sesion correctamente');
+    req.flash('success_msg', 'Cerraste sesion correctamente');
     res.redirect('/')
 }
 
