@@ -98,7 +98,9 @@ indexCtrl.feedback = async (req, res) => {
     const payment = req.query.payment_id;
     // const external_reference = req.query.external_reference;
     // const status = req.query.status;
-    const data = await mp.payment.get(payment)
+    const data = (req.query.payment_id != 'null' && req.query.status != 'null') 
+        ? await mp.payment.get(payment) 
+        : {response: {external_reference: req.query.external_reference, status: 'null'}};
     res.status('200')
     // console.log(data.response.external_reference);
     // console.log(data.response.status)
