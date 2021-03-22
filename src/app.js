@@ -56,8 +56,13 @@ app.use(require('./routes/user.routes'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res) => {
+    res.status(404);
     req.flash('error_msg', 'Esta pagina no existe, fuiste redireccionado');
     res.redirect('/');
-})
+});
+
+app.use((error, req, res, next) => {
+    res.send('500: Error Interno del Servidor', 500);
+});
 
 module.exports = app;
