@@ -28,6 +28,10 @@ indexCtrl.renderIndex = async (req, res) => {
 
 indexCtrl.datosDonar = async (req, res) => {
     const { cantidad } = req.body;
+    if (parseFloat(cantidad) <= 0) {
+        req.flash('error_msg', 'No Puedes Usar Numeros Negativos ni 0');
+        return res.redirect('/');
+    }
     const { name, email, _id } = req.user;
     // console.log(name, email, cantidad);
     // const external_reference = `${Math.floor(Math.random() * 999999999999)}`
