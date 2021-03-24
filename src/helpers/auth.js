@@ -9,4 +9,13 @@ helpers.isAuthenticated = (req, res, next) => {
     res.redirect('/');
 }
 
+helpers.isAuthenticatedFalse = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    res.status(404);
+    req.flash('error_msg', 'No Puedes Registrarte o Iniciar Sesion con una Sesion ya Iniciada');
+    res.redirect('/');
+}
+
 module.exports = helpers;

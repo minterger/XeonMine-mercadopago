@@ -8,15 +8,15 @@ const {
     profile,
     logout
 } = require('../controllers/user.controllers');
-const { isAuthenticated } = require('../helpers/auth');
+const { isAuthenticated, isAuthenticatedFalse } = require('../helpers/auth');
 
-router.get('/login', loginForm);
+router.get('/login', isAuthenticatedFalse, loginForm);
 
-router.post('/login', loginUser);
+router.post('/login', isAuthenticatedFalse, loginUser);
 
-router.get('/register', registerForm);
+router.get('/register', isAuthenticatedFalse, registerForm);
 
-router.post('/register', registerUser);
+router.post('/register', isAuthenticatedFalse, registerUser);
 
 router.get('/profile/:id', isAuthenticated, profile);
 
