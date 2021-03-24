@@ -29,16 +29,30 @@
                     <form id="donarForm" action="/donar" method="POST">
                         <div class="mb-3">
                             <label for="username" class="form-label">Nickname</label>
-                            <input type="text" class="form-control" id="username" value="{{user.name}}" disabled>
+                            <input type="text" class="form-control" id="username" value="{{user.name}}" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" value="{{user.email}}" disabled>
+                            <input type="email" class="form-control" id="email" value="{{user.email}}" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="cantidad" class="form-label">Cantidad</label>
                             <input type="number" name="cantidad" class="form-control" id="cantidad" required>
                         </div>
+                        {{!-- <div class="form-group">
+                            <label class="control-label">Cantidad</label>
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="number" name="cantidad" class="form-control" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">.00</span>
+                                </div>
+                                </div>
+                            </div>
+                        </div> --}}
                     </form>
                     {{else}}
                     <strong><a href="/register">Registrate</a> para donar o <a href="/login">Inicia Sesion</a></strong>
