@@ -43,5 +43,9 @@ hbs.handlebars.registerHelper('date', (date) => {
     return fecha + " | " + hora;
 })
 
+hbs.handlebars.registerHelper('sumar1', (i) => {
+    return ++i;
+})
+
 
 module.exports = hbs

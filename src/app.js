@@ -62,7 +62,7 @@ app.use((req, res) => {
 });
 
 app.use((error, req, res, next) => {
-    res.send('500: Error Interno del Servidor', 500);
+    res.status(500).send('500: Error Interno del Servidor');
 });
 
 module.exports = app;
