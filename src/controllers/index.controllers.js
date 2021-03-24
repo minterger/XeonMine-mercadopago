@@ -15,7 +15,8 @@ const sumarDias = (fecha, dias) => {
     return fecha.toISOString();
 }
 const getFullUrl = (req) =>{
-    const url = req.protocol + '://' + req.get('host');
+    // const url = req.protocol + '://' + req.get('host');
+    const url = 'https://' + req.get('host');
     // console.log(url)
     return url;
 }
