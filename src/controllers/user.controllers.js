@@ -56,7 +56,7 @@ userCtrl.profile = async (req, res) => {
         if (donator) {
             res.render('user/profile', { donator, lastdonation});
         } else {
-            res.status(404);
+            res.status(401);
             req.flash('error_msg', 'Esta pagina no existe, fuiste redireccionado');
             res.redirect('/')
         }
