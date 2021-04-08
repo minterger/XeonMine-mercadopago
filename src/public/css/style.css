@@ -62,13 +62,3 @@
     border: 2px solid #2c2f33;
     transition: all 0.5s;
 }
-
-.discord_active {
-    color: #7289da;
-    height: 3500px;
-    width: 3500px;
-    bottom: -1000px;
-    right: -1000px;
-    border: 2px solid #7289da;
-    transition: all 2s, color 0s, border 0s;
-}
