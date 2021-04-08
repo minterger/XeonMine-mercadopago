@@ -49,7 +49,7 @@
     height: 50px;
     width: 50px;
     font-size: 1.8rem;
-    transition: all 0.5s, color 0s, border 0s;
+    transition: all .5s;
 }
 
 .discordHover:hover {
@@ -60,13 +60,15 @@
     height: 60px;
     width: 60px;
     border: 2px solid #2c2f33;
+    transition: all 0.5s;
 }
 
 .discord_active {
-    height: 300%;
     color: #7289da;
-    width: 300%;
-    bottom: -500px;
-    right: -500px;
+    height: 3500px;
+    width: 3500px;
+    bottom: -1000px;
+    right: -1000px;
     border: 2px solid #7289da;
+    transition: all 2s, color 0s, border 0s;
 }
