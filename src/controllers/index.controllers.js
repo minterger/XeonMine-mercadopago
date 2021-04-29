@@ -148,7 +148,7 @@ indexCtrl.feedback = async (req, res) => {
             res.render('failed', {payment, external_reference});
             break;
         default:
-            res.render('failed', {payment, external_reference});
+            res.render('nopay', {payment, external_reference});
             break;
     }
 }
