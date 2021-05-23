@@ -63,9 +63,9 @@ indexCtrl.datosDonar = async (req, res) => {
         statement_descriptor: 'XeonMine Server',
         payment_methods: {
             excluded_payment_types: [
-                {
-                    id: 'ticket'
-                },
+                // {
+                //     id: 'ticket'
+                // },
                 {
                     id: 'atm'
                 }
